@@ -4,6 +4,35 @@ var app = express();
 const port = process.env.PORT || 8081;
 
 const { makeTextImage } = require('./makeTextImage.js');
+const {
+    addTyposToString,
+    defaultSettings,
+} = require('./typos/addTyposToString.js');
+
+app.get('/typos/:pathname', async function (req, res) {
+    const { params } = req;
+    const inputString = params && params.pathname;
+
+    const settings = {
+        ...defaultSettings,
+        extraCharacters: 40,
+        frequency: 25,
+        missedCharacters: 25,
+    };
+
+    const inputWithTypos = addTyposToString({
+        inputString,
+        settings,
+    });
+
+    const image = await makeTextImage(inputWithTypos);
+
+    res.writeHead(200, {
+        'Content-Type': 'image/jpg',
+        'Content-Length': image.length,
+    });
+    res.end(image);
+});
 
 app.get('/images/:pathname', async function (req, res) {
     const { params } = req;

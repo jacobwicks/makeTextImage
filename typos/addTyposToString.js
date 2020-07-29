@@ -5,21 +5,21 @@ const { resultArrayToString } = require('./resultArrayToString');
 const { getKeyboard } = require('./getKeyboard');
 const { getHomeRowIndexes } = require('./getHomeRowIndexes');
 
-interface TypoSettings {
-    extraCharacters: number;
-    frequency: number;
-    missedCharacters: number;
-    severity: number;
-    transposition: number;
-}
+// interface TypoSettings {
+//     extraCharacters: number;
+//     frequency: number;
+//     missedCharacters: number;
+//     severity: number;
+//     transposition: number;
+// }
 
-interface TypoProps {
-    inputString: string;
-    settings?: TypoSettings;
-}
+// interface TypoProps {
+//     inputString: string;
+//     settings?: TypoSettings;
+// }
 
 //create a settings object
-export const defaultSettings = {
+const defaultSettings = {
     extraCharacters: 5,
     frequency: 10,
     missedCharacters: 15,
@@ -44,7 +44,7 @@ const keyboardModel = {
 };
 
 //uses the typo generating code to introduce typos to the big title header
-const addTyposToString = ({ inputString, settings }: TypoProps): string => {
+const addTyposToString = ({ inputString, settings }) => {
     //calculate homerowIndexes and add them to the keyboardModel
     //@ts-ignore
     keyboardModel.homeRowIndexes = getHomeRowIndexes(keyboardModel);
@@ -60,4 +60,5 @@ const addTyposToString = ({ inputString, settings }: TypoProps): string => {
     return resultArrayToString(resultArray);
 };
 
-export default addTyposToString;
+module.exports.addTyposToString = addTyposToString;
+module.exports.defaultSettings = defaultSettings;
