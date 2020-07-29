@@ -6,8 +6,10 @@ const makeTextImage = (input) => {
     const text = ctx.measureText(input);
 
     ctx.font = '30px Impact';
-
-    ctx.fillText(input, 50, 100, text.width + 50);
+    ctx.fillStyle = 'white';
+    ctx.fillText(input, 30, 30, text.width + 50);
+    ctx.fillStyle = 'black';
+    ctx.strokeText(input, 30, 30, text.width + 50);
 
     return canvas.toBuffer();
 };
