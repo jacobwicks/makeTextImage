@@ -9,6 +9,7 @@ const {
     addTyposToString,
     defaultSettings,
 } = require('./typos/addTyposToString.js');
+const { makeMacro } = require('./makeMacro.js');
 
 app.get('/typos/:pathname', async function (req, res) {
     const { params } = req;
@@ -27,6 +28,29 @@ app.get('/typos/:pathname', async function (req, res) {
     });
 
     const image = await makeTextImage(inputWithTypos);
+
+    res.writeHead(200, {
+        'Content-Type': 'image/jpg',
+        'Content-Length': image.length,
+    });
+    res.end(image);
+});
+
+app.get('/macrofy/:input/:url*', async function (req, res) {
+    // console.log(req.params);
+    // console.log(url + zero);
+
+    // res.send('ok');
+    const { params } = req;
+    const baseUrl = params && params.url;
+    const zero = params && params[0];
+    const input = params && params.input;
+
+    const url = baseUrl + zero;
+    const image = await makeMacro({ url, input });
+    //   res.set("Content-Type", "img/jpg");
+    //   res.send(image);
+    //var img = Buffer.from(image, "base64");
 
     res.writeHead(200, {
         'Content-Type': 'image/jpg',
@@ -63,6 +87,15 @@ app.get('/', function (req, res) {
     You can have typos added to your text at /typos/<br/><br/>
     <img src="/images/typoText.jpg"><br/><br/>
     <a href="https://make-text-image.herokuapp.com/typos/Example Text">https://make-text-image.herokuapp.com/typos/Example Text</a><br/>
+
+
+    Macrofy an existing image: <br/><br/>
+    <img src="https://make-text-image.herokuapp.com/macrofy/cool macro text/https://i.imgur.com/lHgOEHWl.jpeg"><br/><br/>
+    https://make-text-image.herokuapp.com/macrofy/cool macro text/https://i.imgur.com/lHgOEHWl.jpeg
+
+
+    Typo macros at 
+    https://make-text-image.herokuapp.com/typoMacro/cool macro text/https://i.imgur.com/lHgOEHWl.jpeg
     `;
     res.end(instructions);
 });
