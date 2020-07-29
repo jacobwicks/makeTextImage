@@ -1,14 +1,31 @@
-var express = require("express");
+var express = require('express');
 var app = express();
 
 const port = process.env.PORT || 8081;
 
-app.get("/", function (req, res) {
-  res.send("Hello World");
+const { makeTextImage } = require('./makeTextImage.js');
+
+app.get('/images/:pathname', async function (req, res) {
+    const { params } = req;
+    const pathname = params && params.pathname;
+    const image = await makeTextImage(pathname);
+    //   res.set("Content-Type", "img/jpg");
+    //   res.send(image);
+    //var img = Buffer.from(image, "base64");
+
+    res.writeHead(200, {
+        'Content-Type': 'image/jpg',
+        'Content-Length': image.length,
+    });
+    res.end(image);
+});
+
+app.get('/', function (req, res) {
+    res.send('Hello World');
 });
 
 var server = app.listen(port, function () {
-  var host = server.address().address;
+    var host = server.address().address;
 
-  console.log("Example app listening at http://%s:%s", host, port);
+    console.log('Example app listening at http://%s:%s', host, port);
 });
