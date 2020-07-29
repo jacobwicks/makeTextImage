@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+app.use(express.static(__dirname + '/images'));
 
 const port = process.env.PORT || 8081;
 
@@ -50,7 +51,20 @@ app.get('/images/:pathname', async function (req, res) {
 });
 
 app.get('/', function (req, res) {
-    res.send('Hello World');
+    const instructions = `
+    <h1>Welcome to Make Text Image</h1>
+    It generates an image based on the text you put in. <br/><br/>
+
+
+    Access images at /images/ <br/><br/>
+    <img src="/images/exampleText.jpg"><br/><br/>
+    <a href="https://make-text-image.herokuapp.com/images/Example Text">https://make-text-image.herokuapp.com/images/Example Text</a><br/><br/>
+
+    You can have typos added to your text at /typos/<br/><br/>
+    <img src="/images/typoText.jpg"><br/><br/>
+    <a href="https://make-text-image.herokuapp.com/typos/Example Text">https://make-text-image.herokuapp.com/typos/Example Text</a><br/>
+    `;
+    res.end(instructions);
 });
 
 var server = app.listen(port, function () {
