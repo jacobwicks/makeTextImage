@@ -1,5 +1,4 @@
 const { createCanvas, loadImage } = require('canvas');
-const { text } = require('express');
 
 const makeMacro = async ({ url, input }) => {
     if (!url) return undefined;

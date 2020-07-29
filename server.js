@@ -59,6 +59,36 @@ app.get('/macrofy/:input/:url*', async function (req, res) {
     res.end(image);
 });
 
+app.get('/typoMacro/:input/:url*', async function (req, res) {
+    const { params } = req;
+    const baseUrl = params && params.url;
+    const zero = params && params[0];
+    const inputString = params && params.input;
+
+    const settings = {
+        ...defaultSettings,
+        extraCharacters: 40,
+        frequency: 25,
+        missedCharacters: 25,
+    };
+
+    const input = addTyposToString({
+        inputString,
+        settings,
+    });
+    const url = baseUrl + zero;
+    const image = await makeMacro({ url, input });
+    //   res.set("Content-Type", "img/jpg");
+    //   res.send(image);
+    //var img = Buffer.from(image, "base64");
+
+    res.writeHead(200, {
+        'Content-Type': 'image/jpg',
+        'Content-Length': image.length,
+    });
+    res.end(image);
+});
+
 app.get('/images/:pathname', async function (req, res) {
     const { params } = req;
     const pathname = params && params.pathname;
